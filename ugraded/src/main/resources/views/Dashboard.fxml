@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.DashboardController"
+            prefWidth="1000" prefHeight="680"
+            styleClass="dashboard-root">
+
+    <!-- TOP NAVBAR -->
+    <top>
+        <HBox styleClass="navbar" prefHeight="65" alignment="CENTER_LEFT" spacing="20">
+            <Label text="🏠 HostelFinder" styleClass="nav-brand"/>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Button text="🔍 Search" styleClass="nav-btn-active" onAction="#showSearch"/>
+            <Button text="📋 My Bookings" styleClass="nav-btn" onAction="#showBookings"/>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Label fx:id="userGreeting" styleClass="nav-user" text="Hello, Student"/>
+            <Button text="Logout" styleClass="logout-btn" onAction="#handleLogout"/>
+        </HBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <VBox spacing="0">
+
+            <!-- Search Bar Section -->
+            <VBox styleClass="search-section" spacing="16" alignment="CENTER">
+                <Label text="Find Your Perfect Student Hostel" styleClass="search-hero-title"/>
+                <Label text="Search from verified hostels near your university" styleClass="search-hero-sub"/>
+
+                <HBox styleClass="search-bar" spacing="10" alignment="CENTER">
+                    <TextField fx:id="searchField" promptText="Search hostel name, amenities..."
+                               styleClass="search-input" HBox.hgrow="ALWAYS"/>
+                    <ComboBox fx:id="locationFilter" promptText="Location"
+                              styleClass="search-combo" prefWidth="160"/>
+                    <ComboBox fx:id="roomTypeFilter" promptText="Room Type"
+                              styleClass="search-combo" prefWidth="130"/>
+                    <TextField fx:id="maxPriceField" promptText="Max Price (GH₵)"
+                               styleClass="search-input" prefWidth="130"/>
+                    <Button text="Search" styleClass="search-btn" onAction="#handleSearch"/>
+                </HBox>
+            </VBox>
+
+            <!-- Results Area -->
+            <VBox spacing="12" style="-fx-padding: 20 30 20 30;" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Available Hostels" styleClass="section-title"/>
+                    <Label fx:id="resultCount" styleClass="result-count" text=""/>
+                </HBox>
+
+                <ScrollPane styleClass="scroll-pane" VBox.vgrow="ALWAYS" fitToWidth="true">
+                    <VBox fx:id="hostelListContainer" spacing="14" styleClass="hostel-list"/>
+                </ScrollPane>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

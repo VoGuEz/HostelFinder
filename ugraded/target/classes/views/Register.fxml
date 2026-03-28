@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.RegisterController"
+      prefWidth="1000" prefHeight="680"
+      styleClass="root-container">
+
+    <VBox styleClass="left-panel" prefWidth="420" alignment="CENTER" spacing="20">
+        <Label text="🏠" styleClass="brand-icon"/>
+        <Label text="HostelFinder" styleClass="brand-title"/>
+        <Label text="Your home away from home" styleClass="brand-subtitle"/>
+    </VBox>
+
+    <VBox styleClass="right-panel" prefWidth="580" alignment="CENTER">
+        <VBox styleClass="form-card" spacing="20" alignment="CENTER">
+
+            <!-- REGISTER FORM -->
+            <VBox fx:id="registerForm" spacing="14" prefWidth="360">
+                <VBox spacing="6" alignment="CENTER">
+                    <Label text="Create Account" styleClass="form-title"/>
+                    <Label text="Fill in your details to get started" styleClass="form-subtitle"/>
+                </VBox>
+                <VBox spacing="6">
+                    <Label text="Full Name" styleClass="field-label"/>
+                    <TextField fx:id="nameField" promptText="e.g. Kofi Mensah" styleClass="text-field"/>
+                </VBox>
+                <VBox spacing="6">
+                    <Label text="Email Address" styleClass="field-label"/>
+                    <TextField fx:id="emailField" promptText="e.g. kofi@gmail.com" styleClass="text-field"/>
+                </VBox>
+                <HBox spacing="12">
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Phone" styleClass="field-label"/>
+                        <TextField fx:id="phoneField" promptText="0XX XXX XXXX" styleClass="text-field"/>
+                    </VBox>
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="University" styleClass="field-label"/>
+                        <TextField fx:id="universityField" promptText="e.g. UG, KNUST" styleClass="text-field"/>
+                    </VBox>
+                </HBox>
+                <VBox spacing="6">
+                    <Label text="Password" styleClass="field-label"/>
+                    <PasswordField fx:id="passwordField" promptText="Min 6 characters" styleClass="text-field"/>
+                </VBox>
+                <VBox spacing="6">
+                    <Label text="Confirm Password" styleClass="field-label"/>
+                    <PasswordField fx:id="confirmPasswordField" promptText="Repeat password" styleClass="text-field"/>
+                </VBox>
+                <Label fx:id="errorLabel" styleClass="error-label" text="" wrapText="true"/>
+                <Label fx:id="successLabel" styleClass="success-label" text="" wrapText="true"/>
+                <Button fx:id="registerBtn" text="Create Account" styleClass="primary-btn"
+                        onAction="#handleRegister" prefWidth="360" prefHeight="48"/>
+                <HBox alignment="CENTER" spacing="6">
+                    <Label text="Already have an account?" styleClass="switch-text"/>
+                    <Button text="Sign In" styleClass="link-btn" onAction="#goToLogin"/>
+                </HBox>
+            </VBox>
+
+            <!-- OTP VERIFICATION FORM -->
+            <VBox fx:id="otpForm" spacing="20" prefWidth="360" visible="false" managed="false" alignment="CENTER">
+                <Label text="📧" style="-fx-font-size: 48px;"/>
+                <Label text="Verify Your Email" styleClass="form-title"/>
+                <Label fx:id="otpEmailLabel" styleClass="form-subtitle" wrapText="true" textAlignment="CENTER"/>
+                <VBox spacing="6">
+                    <Label text="Enter OTP Code" styleClass="field-label"/>
+                    <TextField fx:id="otpField" promptText="Enter 6-digit code" styleClass="text-field"
+                               style="-fx-font-size: 20px; -fx-alignment: CENTER; -fx-letter-spacing: 4;"/>
+                </VBox>
+                <Label fx:id="errorLabel" styleClass="error-label" text="" wrapText="true"/>
+                <Label fx:id="successLabel" styleClass="success-label" text="" wrapText="true"/>
+                <Button text="Verify Email ✅" styleClass="primary-btn"
+                        onAction="#handleVerifyOTP" prefWidth="360" prefHeight="48"/>
+                <Button text="Back to Login" styleClass="link-btn" onAction="#goToLogin"/>
+            </VBox>
+
+        </VBox>
+    </VBox>
+</HBox>

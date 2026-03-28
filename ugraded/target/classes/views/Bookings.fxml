@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.BookingsController"
+            prefWidth="1000" prefHeight="680"
+            styleClass="dashboard-root">
+
+    <!-- TOP NAVBAR -->
+    <top>
+        <HBox styleClass="navbar" prefHeight="65" alignment="CENTER_LEFT" spacing="20">
+            <Label text="🏠 HostelFinder" styleClass="nav-brand"/>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Button text="🔍 Search" styleClass="nav-btn" onAction="#goToSearch"/>
+            <Button text="📋 My Bookings" styleClass="nav-btn-active" onAction="#showBookings"/>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Label fx:id="userGreeting" styleClass="nav-user" text="Hello, Student"/>
+            <Button text="Logout" styleClass="logout-btn" onAction="#handleLogout"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="20" style="-fx-padding: 30;">
+            <VBox spacing="4">
+                <Label text="My Bookings" styleClass="section-title" style="-fx-font-size: 24px;"/>
+                <Label text="View and manage your hostel bookings" styleClass="search-hero-sub"/>
+            </VBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="scroll-pane">
+                <VBox fx:id="bookingsContainer" spacing="14" styleClass="hostel-list"/>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>

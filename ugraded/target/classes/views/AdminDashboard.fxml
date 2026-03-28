@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.AdminDashboardController"
+            prefWidth="1000" prefHeight="680" styleClass="dashboard-root">
+    <top>
+        <HBox styleClass="navbar" prefHeight="65" alignment="CENTER_LEFT" spacing="20">
+            <Label text="🏠 HostelFinder Admin" styleClass="nav-brand"/>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Button text="👥 Students" styleClass="nav-btn" onAction="#showStudents"/>
+            <Button text="🏨 Hostels" styleClass="nav-btn" onAction="#showAllHostels"/>
+            <Button text="📋 Bookings" styleClass="nav-btn" onAction="#showAllBookings"/>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Label fx:id="userGreeting" styleClass="nav-user"/>
+            <Button text="Logout" styleClass="logout-btn" onAction="#handleLogout"/>
+        </HBox>
+    </top>
+    <center>
+        <VBox spacing="20" style="-fx-padding: 24;">
+            <!-- Stats Cards -->
+            <HBox spacing="16">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6">
+                    <Label text="👥" style="-fx-font-size: 28px;"/>
+                    <Label fx:id="totalStudentsLabel" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2C5282;" text="0"/>
+                    <Label text="Students" style="-fx-font-size: 13px; -fx-text-fill: #718096;"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6">
+                    <Label text="🏨" style="-fx-font-size: 28px;"/>
+                    <Label fx:id="totalHostelsLabel" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #276749;" text="0"/>
+                    <Label text="Hostels" style="-fx-font-size: 13px; -fx-text-fill: #718096;"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6">
+                    <Label text="📋" style="-fx-font-size: 28px;"/>
+                    <Label fx:id="totalBookingsLabel" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #744210;" text="0"/>
+                    <Label text="Bookings" style="-fx-font-size: 13px; -fx-text-fill: #718096;"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="6">
+                    <Label text="💰" style="-fx-font-size: 28px;"/>
+                    <Label fx:id="totalRevenueLabel" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2F855A;" text="GH₵ 0"/>
+                    <Label text="Revenue" style="-fx-font-size: 13px; -fx-text-fill: #718096;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Content Area -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="scroll-pane">
+                <VBox fx:id="contentArea" spacing="12" style="-fx-padding: 4;"/>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>
