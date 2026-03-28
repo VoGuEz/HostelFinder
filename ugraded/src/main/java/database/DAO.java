@@ -13,16 +13,17 @@ public class DAO {
     // ===================== STUDENT =====================
 
     public static boolean registerStudent(String fullName, String email, String password,
-            String phone, String university, String otp) {
-        String sql = "INSERT INTO students (full_name, email, password, phone, university, role, is_verified, verification_otp, otp_expiry) VALUES (?, ?, ?, ?, ?, 'STUDENT', FALSE, ?, ?)";
+            String phone, String university, String role, String otp) {
+        String sql = "INSERT INTO students (full_name, email, password, phone, university, role, is_verified, verification_otp, otp_expiry) VALUES (?, ?, ?, ?, ?, ?, FALSE, ?, ?)";
         try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(sql)) {
             ps.setString(1, fullName);
             ps.setString(2, email);
             ps.setString(3, PasswordUtils.hashPassword(password));
             ps.setString(4, phone);
             ps.setString(5, university);
-            ps.setString(6, otp);
-            ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now().plusMinutes(10)));
+            ps.setString(6, role);
+            ps.setString(7, otp);
+            ps.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now().plusMinutes(10)));
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -176,7 +177,7 @@ public class DAO {
 
     public static List<Hostel> getOwnerHostels(int ownerId) {
         List<Hostel> hostels = new ArrayList<>();
-        String sql = "SELECT * FROM hostels WHERE owner_id = ?";
+        String sql = "SELECT * FROM hostels WHERE owner_id = ? AND is_active = TRUE";
         try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(sql)) {
             ps.setInt(1, ownerId);
             ResultSet rs = ps.executeQuery();
