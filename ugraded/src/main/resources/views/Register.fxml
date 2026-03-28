@@ -44,6 +44,10 @@
                     </VBox>
                 </HBox>
                 <VBox spacing="6">
+                    <Label text="Account Type" styleClass="field-label"/>
+                    <ComboBox fx:id="roleComboBox" prefWidth="360" styleClass="text-field"/>
+                </VBox>
+                <VBox spacing="6">
                     <Label text="Password" styleClass="field-label"/>
                     <PasswordField fx:id="passwordField" promptText="Min 6 characters" styleClass="text-field"/>
                 </VBox>

@@ -17,6 +17,7 @@ public class RegisterController {
     @FXML private TextField emailField;
     @FXML private TextField phoneField;
     @FXML private TextField universityField;
+    @FXML private ComboBox<String> roleComboBox;
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
     @FXML private Label errorLabel;
@@ -33,6 +34,12 @@ public class RegisterController {
     private String pendingName;
 
     @FXML
+    public void initialize() {
+        roleComboBox.getItems().addAll("Student", "Hostel Owner");
+        roleComboBox.setValue("Student");
+    }
+
+    @FXML
     public void handleRegister() {
         String name = nameField.getText().trim();
         String email = emailField.getText().trim();
@@ -40,6 +47,7 @@ public class RegisterController {
         String university = universityField.getText().trim();
         String password = passwordField.getText().trim();
         String confirm = confirmPasswordField.getText().trim();
+        String selectedRole = "Hostel Owner".equals(roleComboBox.getValue()) ? "OWNER" : "STUDENT";
 
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
             showError("Name, email, and password are required."); return;
@@ -61,7 +69,7 @@ public class RegisterController {
         registerBtn.setText("Creating account...");
 
         String otp = PasswordUtils.generateOTP();
-        boolean saved = DAO.registerStudent(name, email, password, phone, university, otp);
+        boolean saved = DAO.registerStudent(name, email, password, phone, university, selectedRole, otp);
 
         if (saved) {
             pendingEmail = email;
