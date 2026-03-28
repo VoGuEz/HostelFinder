@@ -10,6 +10,8 @@
         <HBox styleClass="navbar" prefHeight="65" alignment="CENTER_LEFT" spacing="20">
             <Label text="🏠 HostelFinder" styleClass="nav-brand"/>
             <HBox HBox.hgrow="ALWAYS"/>
+            <Button text="🏨 My Hostels" styleClass="nav-btn" onAction="#showMyHostels"/>
+            <Button text="📋 My Bookings" styleClass="nav-btn" onAction="#showMyBookings"/>
             <Button text="➕ Add Hostel" styleClass="nav-btn" onAction="#showAddHostelDialog"/>
             <HBox HBox.hgrow="ALWAYS"/>
             <Label fx:id="userGreeting" styleClass="nav-user"/>
@@ -18,12 +20,8 @@
     </top>
     <center>
         <VBox spacing="16" style="-fx-padding: 24;">
-            <VBox spacing="4">
-                <Label text="My Hostels" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1A202C;"/>
-                <Label text="Manage your hostel listings and rooms" style="-fx-font-size: 13px; -fx-text-fill: #718096;"/>
-            </VBox>
             <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="scroll-pane">
-                <VBox fx:id="hostelListContainer" spacing="16" style="-fx-padding: 4;"/>
+                <VBox fx:id="contentArea" spacing="16" style="-fx-padding: 4;"/>
             </ScrollPane>
         </VBox>
     </center>

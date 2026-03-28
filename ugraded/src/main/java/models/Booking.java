@@ -16,6 +16,9 @@ public class Booking {
     private String hostelName;
     private String roomNumber;
     private String roomType;
+    private String studentName;
+    private String studentEmail;
+    private String studentPhone;
 
     public Booking() {}
 
@@ -51,6 +54,15 @@ public class Booking {
 
     public String getRoomType() { return roomType; }
     public void setRoomType(String roomType) { this.roomType = roomType; }
+
+    public String getStudentName() { return studentName; }
+    public void setStudentName(String studentName) { this.studentName = studentName; }
+
+    public String getStudentEmail() { return studentEmail; }
+    public void setStudentEmail(String studentEmail) { this.studentEmail = studentEmail; }
+
+    public String getStudentPhone() { return studentPhone; }
+    public void setStudentPhone(String studentPhone) { this.studentPhone = studentPhone; }
 
     public String getFormattedPrice() {
         return String.format("GH₵ %.2f", totalPrice);
