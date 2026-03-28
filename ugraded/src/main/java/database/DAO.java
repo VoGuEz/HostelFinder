@@ -332,6 +332,29 @@ public class DAO {
         return bookings;
     }
 
+    public static List<Booking> getOwnerBookings(int ownerId) {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT b.*, h.name as hostel_name, r.room_number, r.room_type, " +
+                     "s.full_name as student_name, s.email as student_email, s.phone as student_phone " +
+                     "FROM bookings b " +
+                     "JOIN hostels h ON b.hostel_id = h.id " +
+                     "JOIN rooms r ON b.room_id = r.id " +
+                     "JOIN students s ON b.student_id = s.id " +
+                     "WHERE h.owner_id = ? ORDER BY b.booked_at DESC";
+        try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, ownerId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Booking b = buildBooking(rs);
+                b.setStudentName(rs.getString("student_name"));
+                b.setStudentEmail(rs.getString("student_email"));
+                b.setStudentPhone(rs.getString("student_phone"));
+                bookings.add(b);
+            }
+        } catch (SQLException e) { System.err.println("Get owner bookings error: " + e.getMessage()); }
+        return bookings;
+    }
+
     public static boolean cancelBooking(int bookingId, int roomId) {
         String sql = "UPDATE bookings SET status = 'CANCELLED' WHERE id = ?";
         try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(sql)) {

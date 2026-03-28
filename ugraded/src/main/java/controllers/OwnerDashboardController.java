@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import models.Booking;
 import models.Hostel;
 import models.Room;
 import utils.SessionManager;
@@ -21,18 +22,34 @@ import java.util.ResourceBundle;
 
 public class OwnerDashboardController implements Initializable {
 
-    @FXML private VBox hostelListContainer;
+    @FXML private VBox contentArea;
     @FXML private Label userGreeting;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         if (SessionManager.getCurrentStudent() != null)
             userGreeting.setText("Hello, " + SessionManager.getCurrentStudent().getFirstName() + " 👋");
+        showMyHostels();
+    }
+
+    @FXML
+    public void showMyHostels() {
+        contentArea.getChildren().clear();
+        VBox header = new VBox(4);
+        Label title = new Label("🏨  My Hostels");
+        title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1A202C;");
+        Label subtitle = new Label("Manage your hostel listings and rooms");
+        subtitle.setStyle("-fx-font-size: 13px; -fx-text-fill: #718096;");
+        header.getChildren().addAll(title, subtitle);
+        contentArea.getChildren().add(header);
         loadMyHostels();
     }
 
     private void loadMyHostels() {
-        hostelListContainer.getChildren().clear();
+        // Remove all children below the header (index 0 is the header)
+        if (contentArea.getChildren().size() > 1)
+            contentArea.getChildren().remove(1, contentArea.getChildren().size());
+
         int ownerId = SessionManager.getCurrentStudent().getId();
         List<Hostel> hostels = DAO.getOwnerHostels(ownerId);
 
@@ -43,12 +60,12 @@ public class OwnerDashboardController implements Initializable {
             Label msg = new Label("No hostels yet. Add your first hostel!");
             msg.setStyle("-fx-font-size: 15px; -fx-text-fill: #718096;");
             empty.getChildren().add(msg);
-            hostelListContainer.getChildren().add(empty);
+            contentArea.getChildren().add(empty);
             return;
         }
 
         for (Hostel hostel : hostels) {
-            hostelListContainer.getChildren().add(createOwnerHostelCard(hostel));
+            contentArea.getChildren().add(createOwnerHostelCard(hostel));
         }
     }
 
@@ -96,7 +113,8 @@ public class OwnerDashboardController implements Initializable {
 
         // Rooms list
         List<Room> rooms = DAO.getRoomsByHostel(hostel.getId());
-        Label roomsTitle = new Label("Rooms (" + rooms.size() + ")");
+        long freeSpaces = rooms.stream().filter(Room::isAvailable).count();
+        Label roomsTitle = new Label("Rooms (" + rooms.size() + ")   🟢 Free spaces: " + freeSpaces + "/" + rooms.size());
         roomsTitle.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #4A5568;");
 
         HBox roomsBox = new HBox(10);
@@ -258,13 +276,74 @@ public class OwnerDashboardController implements Initializable {
     }
 
     @FXML
+    public void showMyBookings() {
+        contentArea.getChildren().clear();
+        Label title = new Label("📋  My Bookings");
+        title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1A202C;");
+        Label subtitle = new Label("See who has booked your hostel rooms");
+        subtitle.setStyle("-fx-font-size: 13px; -fx-text-fill: #718096;");
+        VBox header = new VBox(4);
+        header.getChildren().addAll(title, subtitle);
+        contentArea.getChildren().add(header);
+
+        int ownerId = SessionManager.getCurrentStudent().getId();
+        List<Booking> bookings = DAO.getOwnerBookings(ownerId);
+
+        if (bookings.isEmpty()) {
+            VBox empty = new VBox(10);
+            empty.setAlignment(javafx.geometry.Pos.CENTER);
+            empty.setPadding(new Insets(40));
+            Label msg = new Label("No bookings yet for your hostels.");
+            msg.setStyle("-fx-font-size: 15px; -fx-text-fill: #718096;");
+            empty.getChildren().add(msg);
+            contentArea.getChildren().add(empty);
+            return;
+        }
+
+        for (Booking b : bookings) {
+            HBox row = new HBox(16);
+            row.setPadding(new Insets(14));
+            row.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.06),6,0,0,2);");
+            row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+            Label avatar = new Label("👤");
+            avatar.setStyle("-fx-font-size: 24px; -fx-background-color: #EBF8FF; -fx-background-radius: 50; -fx-padding: 8;");
+
+            VBox info = new VBox(4);
+            HBox.setHgrow(info, Priority.ALWAYS);
+            Label studentName = new Label(b.getStudentName() != null ? b.getStudentName() : "Unknown");
+            studentName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2D3748;");
+            String phone = b.getStudentPhone() != null && !b.getStudentPhone().isEmpty()
+                ? "  |  📞 " + b.getStudentPhone() : "";
+            Label contact = new Label((b.getStudentEmail() != null ? b.getStudentEmail() : "") + phone);
+            contact.setStyle("-fx-font-size: 12px; -fx-text-fill: #718096;");
+            Label hostelRoom = new Label("🏨 " + b.getHostelName() + "  —  Room " + b.getRoomNumber() + " (" + b.getRoomType() + ")");
+            hostelRoom.setStyle("-fx-font-size: 12px; -fx-text-fill: #4A5568;");
+            Label dates = new Label("📅 " + b.getCheckInDate() + " → " + b.getCheckOutDate());
+            dates.setStyle("-fx-font-size: 12px; -fx-text-fill: #718096;");
+            info.getChildren().addAll(studentName, contact, hostelRoom, dates);
+
+            Label price = new Label(b.getFormattedPrice());
+            price.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2F855A;");
+
+            String statusColor = "CONFIRMED".equals(b.getStatus())
+                ? "#C6F6D5; -fx-text-fill: #276749" : "#FED7D7; -fx-text-fill: #9B2C2C";
+            Label status = new Label(b.getStatus());
+            status.setStyle("-fx-background-color: " + statusColor + "; -fx-background-radius: 20; -fx-padding: 3 12; -fx-font-size: 11px; -fx-font-weight: bold;");
+
+            row.getChildren().addAll(avatar, info, price, status);
+            contentArea.getChildren().add(row);
+        }
+    }
+
+    @FXML
     public void handleLogout() {
         SessionManager.logout();
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/views/Login.fxml"));
             Scene scene = new Scene(root, 1000, 680);
             scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
-            Stage stage = (Stage) hostelListContainer.getScene().getWindow();
+            Stage stage = (Stage) contentArea.getScene().getWindow();
             stage.setScene(scene);
         } catch (Exception e) { e.printStackTrace(); }
     }
